@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오사카 먹방 & 힐링 여행 - 솔비님을 위한 가이드</title>
+    <meta name="description" content="2026년 2월 20일~23일, 오사카 3박 4일 여행 가이드. 도톤보리, USJ, 나라 사슴공원까지!">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Leaflet CSS & JS (지도) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sakura: '#FFB7C5',
+                        coral: '#FF6B6B',
+                        sunset: '#FF8E53',
+                        navy: '#1a1a2e',
+                        deepblue: '#16213e',
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                        display: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        /* 스크롤바 커스텀 */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #FF6B6B, #FF8E53);
+            border-radius: 10px;
+        }
+
+        /* 지도 컨테이너 */
+        #map {
+            height: 40vh;
+            width: 100%;
+            z-index: 10;
+        }
+
+        @media (min-width: 1024px) {
+            #map {
+                height: 100vh;
+                position: sticky;
+                top: 0;
+            }
+        }
+
+        /* 타임라인 스타일 */
+        .timeline-line {
+            position: absolute;
+            left: 24px;
+            top: 48px;
+            bottom: -16px;
+            width: 3px;
+            background: linear-gradient(180deg, #FF6B6B 0%, #FF8E53 50%, #FFB7C5 100%);
+            z-index: 0;
+            border-radius: 2px;
+        }
+
+        .last-item .timeline-line {
+            display: none;
+        }
+
+        /* 탭 스타일 */
+        .tab-btn {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #FF6B6B, #FF8E53);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .tab-active::after {
+            width: 80%;
+        }
+
+        .tab-active {
+            color: #FF6B6B;
+            font-weight: 700;
+        }
+
+        .tab-inactive {
+            color: #64748b;
+        }
+
+        .tab-inactive:hover {
+            color: #FF8E53;
+        }
+
+        /* 카드 호버 효과 */
+        .schedule-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .schedule-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(255, 107, 107, 0.25);
+        }
+
+        /* 이미지 효과 */
+        .img-container {
+            overflow: hidden;
+        }
+
+        .img-container img {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .schedule-card:hover .img-container img {
+            transform: scale(1.1);
+        }
+
+        /* 헤더 그라디언트 오버레이 */
+        .header-overlay {
+            background: linear-gradient(to top,
+                    rgba(26, 26, 46, 0.95) 0%,
+                    rgba(26, 26, 46, 0.6) 40%,
+                    rgba(26, 26, 46, 0.3) 70%,
+                    transparent 100%);
+        }
+
+        /* 플로팅 애니메이션 */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* 펄스 애니메이션 */
+        @keyframes pulse-soft {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .pulse-soft {
+            animation: pulse-soft 2s ease-in-out infinite;
+        }
+
+        /* 글래스모피즘 */
+        .glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* 지도 마커 스타일 */
+        .custom-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+        }
+
+        /* 탭 숨김 스크롤바 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="overflow-x-hidden">
+
+    <!-- 모바일/태블릿용 상단 헤더 -->
+    <header class="bg-navy text-white relative overflow-hidden lg:hidden h-72">
+        <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1200&auto=format&fit=crop"
+            class="absolute inset-0 w-full h-full object-cover opacity-80" alt="Osaka Night View">
+        <div class="header-overlay absolute inset-0"></div>
+        <div class="relative z-10 flex flex-col justify-end h-full p-6">
+            <div
+                class="inline-flex items-center gap-2 bg-gradient-to-r from-coral to-sunset text-white text-xs font-bold px-3 py-1 rounded-full mb-3 w-fit">
+                <i data-lucide="calendar" class="w-3 h-3"></i>
+                FEB 20 - FEB 23, 2026
+            </div>
+            <h1 class="text-3xl font-bold mb-2">오사카 먹방 & 힐링 여행</h1>
+            <p class="text-sm text-gray-300 flex items-center gap-2">
+                <i data-lucide="heart" class="w-4 h-4 text-sakura"></i>
+                솔비님을 위한 완벽 가이드
+            </p>
+        </div>
+    </header>
+
+    <div class="flex flex-col lg:flex-row min-h-screen">
+
+        <!-- 왼쪽 콘텐츠 영역 -->
+        <div
+            class="w-full lg:w-[45%] lg:h-screen lg:overflow-y-auto custom-scroll bg-gradient-to-b from-white to-gray-50 relative z-20 shadow-2xl">
+
+            <!-- 데스크탑용 헤더 -->
+            <div class="hidden lg:block relative h-80 bg-navy text-white overflow-hidden shrink-0">
+                <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1200&auto=format&fit=crop"
+                    class="absolute inset-0 w-full h-full object-cover opacity-80" alt="Osaka Night View">
+                <div class="header-overlay absolute inset-0"></div>
+
+                <!-- 플로팅 이모지 데코 -->
+                <div class="absolute top-8 right-8 text-4xl float-animation">🏯</div>
+                <div class="absolute top-20 right-24 text-2xl float-animation" style="animation-delay: 0.5s;">🍣</div>
+
+                <div class="relative z-10 flex flex-col justify-end h-full p-8">
+                    <div
+                        class="inline-flex items-center gap-2 bg-gradient-to-r from-coral to-sunset text-white text-sm font-bold px-4 py-2 rounded-full mb-4 w-fit shadow-lg">
+                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                        FEB 20 - FEB 23, 2026 (금 - 월)
+                    </div>
+                    <h1 class="text-4xl font-bold mb-3 leading-tight">
+                        오사카 먹방 & 힐링 여행
+                    </h1>
+                    <p class="text-lg text-gray-300 flex items-center gap-2">
+                        <i data-lucide="heart" class="w-5 h-5 text-sakura pulse-soft"></i>
+                        솔비님을 위한 완벽 가이드
+                    </p>
+                </div>
+            </div>
+
+            <!-- 날짜 선택 탭 -->
+            <div class="sticky top-0 glass z-30 shadow-sm border-b border-gray-100/50">
+                <div class="flex overflow-x-auto no-scrollbar">
+                    <button onclick="changeDay(0)" id="tab-0"
+                        class="tab-btn flex-1 py-4 px-3 text-center whitespace-nowrap tab-active">
+                        <span class="block text-xs text-gray-400 mb-1">2/20 (금)</span>
+                        <span class="block text-sm">1일차</span>
+                        <span class="block text-[10px] text-gray-500 mt-0.5">오사카 바이브</span>
+                    </button>
+                    <button onclick="changeDay(1)" id="tab-1"
+                        class="tab-btn flex-1 py-4 px-3 text-center whitespace-nowrap tab-inactive">
+                        <span class="block text-xs text-gray-400 mb-1">2/21 (토)</span>
+                        <span class="block text-sm">2일차</span>
+                        <span class="block text-[10px] text-gray-500 mt-0.5">USJ 올인</span>
+                    </button>
+                    <button onclick="changeDay(2)" id="tab-2"
+                        class="tab-btn flex-1 py-4 px-3 text-center whitespace-nowrap tab-inactive">
+                        <span class="block text-xs text-gray-400 mb-1">2/22 (일)</span>
+                        <span class="block text-sm">3일차</span>
+                        <span class="block text-[10px] text-gray-500 mt-0.5">나라 힐링</span>
+                    </button>
+                    <button onclick="changeDay(3)" id="tab-3"
+                        class="tab-btn flex-1 py-4 px-3 text-center whitespace-nowrap tab-inactive">
+                        <span class="block text-xs text-gray-400 mb-1">2/23 (월)</span>
+                        <span class="block text-sm">4일차</span>
+                        <span class="block text-[10px] text-gray-500 mt-0.5">시장 & 귀국</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 일정 리스트 컨테이너 -->
+            <div id="itinerary-list" class="p-6 pb-24 lg:pb-12 min-h-screen lg:min-h-0">
+                <!-- 자바스크립트로 내용이 채워집니다 -->
+            </div>
+
+            <!-- 푸터 -->
+            <div class="p-6 pt-0 text-center text-xs text-gray-400">
+                <p>Made with 💕 for 솔비</p>
+            </div>
+        </div>
+
+        <!-- 오른쪽 지도 영역 -->
+        <div class="w-full lg:w-[55%] relative bg-gray-100">
+            <div id="map"></div>
+
+            <!-- 지도 범례 -->
+            <div
+                class="absolute top-4 right-4 glass p-4 rounded-2xl shadow-xl z-[500] text-xs space-y-3 hidden md:block">
+                <div class="font-bold text-gray-700 mb-2 flex items-center gap-2">
+                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                    범례
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="w-4 h-4 rounded-full bg-gradient-to-br from-coral to-sunset shadow-sm"></span>
+                    <span class="text-gray-600">식사/맛집</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="w-4 h-4 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 shadow-sm"></span>
+                    <span class="text-gray-600">관광/활동</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="w-4 h-4 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 shadow-sm"></span>
+                    <span class="text-gray-600">호텔/이동</span>
+                </div>
+            </div>
+
+            <!-- 현재 날짜 표시 -->
+            <div
+                class="absolute bottom-4 left-4 glass px-4 py-2 rounded-full shadow-lg z-[500] text-sm font-medium text-gray-700 hidden md:flex items-center gap-2">
+                <i data-lucide="navigation" class="w-4 h-4 text-coral"></i>
+                <span id="current-day-label">1일차 경로</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 색상 및 아이콘 설정 ---
+        const colors = {
+            food: '#FF6B6B',
+            spot: '#3b82f6',
+            hotel: '#f59e0b',
+            cafe: '#FF6B6B',
+            shop: '#8b5cf6',
+            train: '#f59e0b'
+        };
+
+        const gradients = {
+            food: 'from-coral to-sunset',
+            spot: 'from-blue-400 to-blue-600',
+            hotel: 'from-amber-400 to-yellow-500',
+            cafe: 'from-coral to-sunset',
+            shop: 'from-purple-400 to-purple-600',
+            train: 'from-amber-400 to-yellow-500'
+        };
+
+        const badgeColors = {
+            food: 'bg-gradient-to-r from-red-100 to-orange-100 text-red-700',
+            spot: 'bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-700',
+            hotel: 'bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700',
+            cafe: 'bg-gradient-to-r from-red-100 to-orange-100 text-red-700',
+            shop: 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700',
+            train: 'bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700'
+        };
+
+        const icons = {
+            food: 'utensils',
+            spot: 'camera',
+            hotel: 'bed',
+            cafe: 'coffee',
+            shop: 'shopping-bag',
+            train: 'train-front'
+        };
+
+        // --- 데이터 정의 (이미지: 디자인 타이틀 카드 적용) ---
+        const scheduleData = [
+            // 1일차
+            {
+                date: "2월 20일 (금)",
+                title: "도착 & 오사카의 바이브",
+                summary: "짐 풀고 바로 규카츠부터! 도톤보리 야경까지.",
+                emoji: "🌆",
+                locations: [
+                    {
+                        time: "14:30",
+                        title: "호텔 체크인",
+                        type: "hotel",
+                        desc: "소테츠 프레사 인 오사카 난바. 위치 깡패! 짐만 맡기고 바로 출발.",
+                        tip: "프론트에 여권 제시 필요",
+                        lat: 34.6635, lng: 135.5020,
+                        img: "https://placehold.co/800x500/f59e0b/ffffff?text=Hotel+Check-in&font=montserrat"
+                    },
+                    {
+                        time: "15:00",
+                        title: "모토무라 규카츠",
+                        type: "food",
+                        tag: "점심 추천 ⭐",
+                        desc: "호텔 도보 3분! 화로에 살짝 구워 와사비와 함께. 한국인 원픽 맛집!",
+                        tip: "웨이팅 길면 옆집 '교토 가츠규' 추천",
+                        lat: 34.6653, lng: 135.5015,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Motomura+Gyukatsu&font=montserrat"
+                    },
+                    {
+                        time: "16:30",
+                        title: "오사카 성",
+                        type: "spot",
+                        tag: "관광",
+                        desc: "오사카의 랜드마크! 천수각 배경으로 사진 필수.",
+                        tip: "입장료 600엔, 16:30까지 입장",
+                        lat: 34.6873, lng: 135.5262,
+                        img: "https://placehold.co/800x500/3b82f6/ffffff?text=Osaka+Castle&font=montserrat"
+                    },
+                    {
+                        time: "18:30",
+                        title: "츠텐카쿠 & 신세카이",
+                        type: "spot",
+                        tag: "관광",
+                        desc: "레트로한 오사카 감성 거리. 화려한 간판들 구경!",
+                        tip: "야경이 예쁜 시간대",
+                        lat: 34.6525, lng: 135.5063,
+                        img: "https://placehold.co/800x500/3b82f6/ffffff?text=Tsutenkaku+Shinsekai&font=montserrat"
+                    },
+                    {
+                        time: "19:30",
+                        title: "쿠시카츠 다루마",
+                        type: "food",
+                        tag: "저녁",
+                        desc: "오사카 명물 튀김 꼬치! '소스 두 번 찍기 금지' 룰 지키기~",
+                        tip: "맥주와 함께 🍺",
+                        lat: 34.6517, lng: 135.5065,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Kushikatsu+Daruma&font=montserrat"
+                    },
+                    {
+                        time: "21:00",
+                        title: "도톤보리 & 글리코상",
+                        type: "spot",
+                        tag: "야경",
+                        desc: "오사카의 심장! 글리코상 앞에서 같은 포즈로 인증샷.",
+                        tip: "돈키호테도 구경",
+                        lat: 34.6687, lng: 135.5013,
+                        img: "https://placehold.co/800x500/3b82f6/ffffff?text=Dotonbori+Glico&font=montserrat"
+                    },
+                    {
+                        time: "22:30",
+                        title: "킨류라멘",
+                        type: "food",
+                        tag: "야식",
+                        desc: "용 간판이 있는 야외 라멘집. 김치와 부추 팍팍!",
+                        tip: "24시간 영업",
+                        lat: 34.6685, lng: 135.5030,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Kinryu+Ramen&font=montserrat"
+                    }
+                ]
+            },
+            // 2일차
+            {
+                date: "2월 21일 (토)",
+                title: "USJ 올인 & 철판요리",
+                summary: "동심의 세계 USJ와 오사카 필수 먹방 코스!",
+                emoji: "🎢",
+                locations: [
+                    {
+                        time: "07:30",
+                        title: "편의점 조식",
+                        type: "food",
+                        tag: "아침",
+                        desc: "오픈런 필수! 타마고 산도와 오니기리로 이동하며 해결.",
+                        tip: "로손 or 세븐일레븐 추천",
+                        lat: 34.6640, lng: 135.5025,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Convenience+Store&font=montserrat"
+                    },
+                    {
+                        time: "08:30",
+                        title: "유니버설 스튜디오 재팬",
+                        type: "spot",
+                        tag: "올데이 🎮",
+                        desc: "해리포터, 닌텐도 월드 정복! 하루 종일 신나게!",
+                        tip: "익스프레스 패스 구매 추천",
+                        lat: 34.6654, lng: 135.4323,
+                        img: "https://placehold.co/800x500/3b82f6/ffffff?text=Universal+Studios+Japan&font=montserrat"
+                    },
+                    {
+                        time: "12:30",
+                        title: "쓰리 브룸스틱스",
+                        type: "food",
+                        tag: "점심",
+                        desc: "해리포터 존 맛집! 옥수수 구이와 버터비어 필수.",
+                        tip: "야외 테라스석 강추",
+                        lat: 34.6660, lng: 135.4330,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Three+Broomsticks&font=montserrat"
+                    },
+                    {
+                        time: "19:30",
+                        title: "아지노야 오코노미야키",
+                        type: "food",
+                        tag: "저녁",
+                        desc: "믹스 오코노미야키와 야키소바! B세트 가성비 최고.",
+                        tip: "미즈노도 좋아요",
+                        lat: 34.6680, lng: 135.5008,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Ajinoya+Okonomiyaki&font=montserrat"
+                    },
+                    {
+                        time: "21:30",
+                        title: "앗치치혼포 타코야키",
+                        type: "food",
+                        tag: "야식",
+                        desc: "돈키호테 옆 빨간 문어! 포장해서 강변 벤치에서 맥주랑.",
+                        tip: "6개입 추천",
+                        lat: 34.6690, lng: 135.5033,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Takoyaki&font=montserrat"
+                    }
+                ]
+            },
+            // 3일차
+            {
+                date: "2월 22일 (일)",
+                title: "나라 사슴 & 로컬 술집",
+                summary: "귀여운 사슴들과 힐링 후 찐 로컬 감성 술자리!",
+                emoji: "🦌",
+                locations: [
+                    {
+                        time: "09:00",
+                        title: "호시노 커피",
+                        type: "cafe",
+                        tag: "아침",
+                        desc: "클래식한 분위기의 모닝 세트 & 폭신한 수플레 팬케이크!",
+                        tip: "난바점 추천",
+                        lat: 34.6662, lng: 135.5005,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Hoshino+Coffee&font=montserrat"
+                    },
+                    {
+                        time: "10:30",
+                        title: "나라 사슴공원",
+                        type: "spot",
+                        tag: "힐링 🦌",
+                        desc: "사슴들에게 센베이를 주며 교감! 인사도 한답니다.",
+                        tip: "나라역에서 도보 15분",
+                        lat: 34.6850, lng: 135.8430,
+                        img: "https://placehold.co/800x500/3b82f6/ffffff?text=Nara+Deer+Park&font=montserrat"
+                    },
+                    {
+                        time: "13:00",
+                        title: "시즈카 공원점",
+                        type: "food",
+                        tag: "점심 추천 ⭐",
+                        desc: "50년 전통 솥밥(카마메시)! 마지막 누룽지가 일품.",
+                        tip: "웨이팅 있을 수 있음",
+                        lat: 34.6860, lng: 135.8400,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Kamameshi+Shizuka&font=montserrat"
+                    },
+                    {
+                        time: "15:00",
+                        title: "토다이지 (대불전)",
+                        type: "spot",
+                        tag: "관광",
+                        desc: "세계 최대 목조건물과 15m 대불상!",
+                        tip: "기둥 구멍 통과 도전",
+                        lat: 34.6890, lng: 135.8398,
+                        img: "https://placehold.co/800x500/3b82f6/ffffff?text=Todaiji+Temple&font=montserrat"
+                    },
+                    {
+                        time: "19:00",
+                        title: "족발의 카도야",
+                        type: "food",
+                        tag: "저녁/야식",
+                        desc: "뜯는 맛이 최고인 족발 조림! 맥주 무한 흡입 가능.",
+                        tip: "예약 추천",
+                        lat: 34.6670, lng: 135.5000,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Kadoya+Pork&font=montserrat"
+                    }
+                ]
+            },
+            // 4일차
+            {
+                date: "2월 23일 (월)",
+                title: "시장 먹방 & 귀국",
+                summary: "구로몬 시장에서 마지막 먹방 후 안녕 오사카!",
+                emoji: "✈️",
+                locations: [
+                    {
+                        time: "08:30",
+                        title: "이치후지 식당",
+                        type: "food",
+                        tag: "아침 추천 ⭐",
+                        desc: "마지막 날 아침은 든든하게! 고깃국(니쿠스이)으로 해장.",
+                        tip: "현지인 맛집",
+                        lat: 34.6650, lng: 135.5040,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Ichifuji+Shokudo&font=montserrat"
+                    },
+                    {
+                        time: "10:00",
+                        title: "체크아웃",
+                        type: "hotel",
+                        tag: "체크아웃",
+                        desc: "아쉬운 체크아웃... 짐 맡기고 가볍게 시장으로!",
+                        tip: "짐 보관 가능",
+                        lat: 34.6635, lng: 135.5020,
+                        img: "https://placehold.co/800x500/f59e0b/ffffff?text=Check-out&font=montserrat"
+                    },
+                    {
+                        time: "10:30",
+                        title: "구로몬 시장 투어",
+                        type: "food",
+                        tag: "먹방 🍣",
+                        desc: "참치회, 가리비 버터구이, 고베규 꼬치, 딸기 모찌! 먹고 싶은 것 다!",
+                        tip: "오사카의 부엌",
+                        lat: 34.6655, lng: 135.5065,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Kuromon+Market&font=montserrat"
+                    },
+                    {
+                        time: "12:30",
+                        title: "난바역 → 간사이 공항",
+                        type: "train",
+                        tag: "이동",
+                        desc: "라피트 특급 탑승! 호텔에서 짐 찾고 공항으로.",
+                        tip: "약 45분 소요",
+                        lat: 34.6641, lng: 135.5006,
+                        img: "https://placehold.co/800x500/f59e0b/ffffff?text=Airport+Express&font=montserrat"
+                    }
+                ]
+            }
+        ];
+
+        // --- 지도 및 로직 초기화 ---
+        let map;
+        let markers = [];
+        let polyline;
+        let currentDayIndex = 0;
+
+        function initMap() {
+            if (map) return;
+
+            const mapContainer = document.getElementById('map');
+            if (!mapContainer) return;
+
+            // 초기 중심좌표 (난바)
+            map = L.map('map', {
+                zoomControl: false
+            }).setView([34.6653, 135.5015], 14);
+
+            // 줌 컨트롤 위치 변경
+            L.control.zoom({
+                position: 'bottomright'
+            }).addTo(map);
+
+            // [변경완료] 구글맵 (한글 적용)
+            // 구글맵 타일 서버 사용 (hl=ko 옵션으로 한글 표기)
+            L.tileLayer('http://{s}.google.com/vt/lyrs=m&hl=ko&x={x}&y={y}&z={z}', {
+                maxZoom: 20,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+                attribution: '&copy; Google Maps'
+            }).addTo(map);
+
+            renderDay(0);
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function changeDay(index) {
+            if (!map) initMap();
+            renderDay(index);
+        }
+
+        function createCustomIcon(type, index) {
+            let color = colors.spot;
+            if (type === 'food' || type === 'cafe') color = colors.food;
+            if (type === 'hotel' || type === 'train') color = colors.hotel;
+            if (type === 'shop') color = colors.shop;
+
+            return L.divIcon({
+                className: 'custom-div-icon',
+                html: `
+                    <div class="custom-marker" style="background: linear-gradient(135deg, ${color}, ${color}dd);">
+                        ${index + 1}
+                    </div>
+                `,
+                iconSize: [36, 36],
+                iconAnchor: [18, 18],
+                popupAnchor: [0, -18]
+            });
+        }
+
+        function renderDay(index) {
+            currentDayIndex = index;
+            const data = scheduleData[index];
+
+            // 현재 날짜 라벨 업데이트
+            const dayLabel = document.getElementById('current-day-label');
+            if (dayLabel) {
+                dayLabel.textContent = `${index + 1}일차 경로 ${data.emoji}`;
+            }
+
+            // 탭 스타일 업데이트
+            document.querySelectorAll('button[id^="tab-"]').forEach((btn, idx) => {
+                if (idx === index) {
+                    btn.classList.remove('tab-inactive');
+                    btn.classList.add('tab-active');
+                } else {
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('tab-inactive');
+                }
+            });
+
+            // 리스트 렌더링
+            const listContainer = document.getElementById('itinerary-list');
+            listContainer.innerHTML = '';
+
+            // 날짜 헤더
+            const headerHtml = `
+                <div class="mb-6">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="text-3xl">${data.emoji}</span>
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800">${data.title}</h2>
+                            <p class="text-sm text-gray-500">${data.summary}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            listContainer.insertAdjacentHTML('beforeend', headerHtml);
+
+            data.locations.forEach((loc, i) => {
+                const isLast = i === data.locations.length - 1;
+                const badgeColor = badgeColors[loc.type] || badgeColors.spot;
+                const iconName = icons[loc.type] || 'map-pin';
+                const gradient = gradients[loc.type] || gradients.spot;
+
+                const html = `
+                    <div class="relative pl-14 py-3 group ${isLast ? 'last-item' : ''}" onclick="focusMap(${i})">
+                        <!-- 타임라인 라인 -->
+                        <div class="timeline-line"></div>
+                        
+                        <!-- 타임라인 번호 -->
+                        <div class="absolute left-0 top-5 w-12 flex justify-center z-10">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-sm shadow-lg transition-transform group-hover:scale-110">
+                                ${i + 1}
+                            </div>
+                        </div>
+
+                        <!-- 카드 -->
+                        <div class="schedule-card bg-white rounded-2xl shadow-md border border-gray-100/50 overflow-hidden cursor-pointer">
+                            <div class="flex flex-col sm:flex-row">
+                                <div class="w-full sm:w-2/5 h-48 sm:h-auto relative img-container">
+                                    <img src="${loc.img}" 
+                                         onerror="this.src='https://images.unsplash.com/photo-1480796927426-f609979314bd?q=80&w=800&auto=format&fit=crop'" 
+                                         class="absolute inset-0 w-full h-full object-cover" 
+                                         alt="${loc.title}"
+                                         loading="lazy">
+                                    <!-- 시간 뱃지 -->
+                                    <div class="absolute top-3 left-3 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                                        <i data-lucide="clock" class="w-3 h-3"></i>
+                                        ${loc.time}
+                                    </div>
+                                </div>
+                                <div class="w-full sm:w-3/5 p-5 flex flex-col justify-center">
+                                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                                        ${loc.tag ? `<span class="text-[11px] font-bold px-2.5 py-1 rounded-full ${badgeColor}">${loc.tag}</span>` : ''}
+                                    </div>
+                                    <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-coral transition-colors flex items-center gap-2">
+                                        <i data-lucide="${iconName}" class="w-4 h-4 text-gray-400"></i>
+                                        ${loc.title}
+                                    </h3>
+                                    <p class="text-sm text-gray-600 leading-relaxed mb-2">${loc.desc}</p>
+                                    ${loc.tip ? `
+                                        <div class="flex items-center gap-2 text-xs text-gray-400 mt-1">
+                                            <i data-lucide="lightbulb" class="w-3 h-3"></i>
+                                            <span>${loc.tip}</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                listContainer.insertAdjacentHTML('beforeend', html);
+            });
+            if (window.lucide) lucide.createIcons();
+
+            updateMapMarkers(data.locations);
+        }
+
+        function updateMapMarkers(locations) {
+            if (!map) return;
+
+            // 기존 마커 및 라인 제거
+            markers.forEach(marker => map.removeLayer(marker));
+            if (polyline) map.removeLayer(polyline);
+            markers = [];
+
+            const latlngs = [];
+
+            locations.forEach((loc, i) => {
+                const marker = L.marker([loc.lat, loc.lng], { icon: createCustomIcon(loc.type, i) })
+                    .addTo(map)
+                    .bindPopup(`
+                        <div class="font-sans p-1 min-w-[200px]">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="bg-coral text-white text-xs font-bold px-2 py-0.5 rounded-full">${loc.time}</span>
+                            </div>
+                            <h3 class="font-bold text-sm mb-1">${loc.title}</h3>
+                            <p class="text-xs text-gray-600">${loc.desc}</p>
+                        </div>
+                    `, {
+                        className: 'custom-popup'
+                    });
+
+                markers.push(marker);
+                latlngs.push([loc.lat, loc.lng]);
+            });
+
+            // 경로 그리기 (그라디언트 효과)
+            polyline = L.polyline(latlngs, {
+                color: '#FF6B6B',
+                weight: 4,
+                opacity: 0.7,
+                dashArray: '12, 8',
+                lineCap: 'round',
+                lineJoin: 'round'
+            }).addTo(map);
+
+            // 모든 마커가 보이도록 줌 조절
+            if (markers.length > 0) {
+                const group = new L.featureGroup(markers);
+                map.fitBounds(group.getBounds(), { padding: [60, 60] });
+            }
+        }
+
+        function focusMap(index) {
+            const marker = markers[index];
+            if (marker && map) {
+                map.setView(marker.getLatLng(), 16, { animate: true, duration: 0.5 });
+                setTimeout(() => marker.openPopup(), 300);
+            }
+            // 모바일에서는 지도로 스크롤 이동
+            if (window.innerWidth < 1024) {
+                const mapEl = document.getElementById('map');
+                if (mapEl) mapEl.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // 초기 실행
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMap);
+        } else {
+            initMap();
+        }
+
+    </script>
+</body>
+
+</html>
