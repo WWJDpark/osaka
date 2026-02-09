@@ -296,7 +296,7 @@
                         class="tab-btn flex-1 py-4 px-3 text-center whitespace-nowrap tab-active">
                         <span class="block text-xs text-gray-400 mb-1">2/20 (금)</span>
                         <span class="block text-sm">1일차</span>
-                        <span class="block text-[10px] text-gray-500 mt-0.5">오사카 바이브</span>
+                        <span class="block text-[10px] text-gray-500 mt-0.5">나라 힐링</span>
                     </button>
                     <button onclick="changeDay(1)" id="tab-1"
                         class="tab-btn flex-1 py-4 px-3 text-center whitespace-nowrap tab-inactive">
@@ -308,7 +308,7 @@
                         class="tab-btn flex-1 py-4 px-3 text-center whitespace-nowrap tab-inactive">
                         <span class="block text-xs text-gray-400 mb-1">2/22 (일)</span>
                         <span class="block text-sm">3일차</span>
-                        <span class="block text-[10px] text-gray-500 mt-0.5">나라 힐링</span>
+                        <span class="block text-[10px] text-gray-500 mt-0.5">오사카 관광</span>
                     </button>
                     <button onclick="changeDay(3)" id="tab-3"
                         class="tab-btn flex-1 py-4 px-3 text-center whitespace-nowrap tab-inactive">
@@ -407,9 +407,9 @@
             // 1일차
             {
                 date: "2월 20일 (금)",
-                title: "도착 & 오사카의 바이브",
-                summary: "짐 풀고 바로 규카츠부터! 도톤보리 야경까지.",
-                emoji: "🌆",
+                title: "도착 & 나라 힐링",
+                summary: "짐 풀고 규카츠 먹고 나라 사슴공원으로!",
+                emoji: "🦌",
                 locations: [
                     {
                         time: "14:30",
@@ -442,48 +442,44 @@
                     },
                     {
                         time: "16:30",
-                        title: "오사카 성",
+                        title: "나라 사슴공원",
                         type: "spot",
-                        tag: "관광",
-                        desc: "오사카의 랜드마크! 천수각 배경으로 사진 필수.",
-                        tip: "입장료 600엔, 16:30까지 입장",
-                        lat: 34.6873, lng: 135.5262,
-                        img: "https://placehold.co/800x500/3b82f6/ffffff?text=Osaka+Castle&font=montserrat",
+                        tag: "힐링 🦌",
+                        desc: "사슴들에게 센베이를 주며 교감! 인사도 한답니다.",
+                        tip: "나라역에서 도보 15분",
+                        lat: 34.6850, lng: 135.8430,
+                        img: "https://placehold.co/800x500/3b82f6/ffffff?text=Nara+Deer+Park&font=montserrat",
                         details: {
-                            hours: "09:00 - 17:00 (입장 마감 16:30)",
-                            price: "천수각 입장료 600엔",
-                            address: "오사카시 주오구 오사카조 1-1"
+                            hours: "24시간 개방",
+                            price: "무료 (센베이 200엔)",
+                            address: "나라시 조시초 469"
                         }
                     },
                     {
-                        time: "18:30",
-                        title: "츠텐카쿠 & 신세카이",
+                        time: "18:00",
+                        title: "토다이지 (대불전)",
                         type: "spot",
                         tag: "관광",
-                        desc: "레트로한 오사카 감성 거리. 화려한 간판들 구경!",
-                        tip: "야경이 예쁜 시간대",
-                        lat: 34.6525, lng: 135.5063,
-                        img: "https://placehold.co/800x500/3b82f6/ffffff?text=Tsutenkaku+Shinsekai&font=montserrat",
+                        desc: "세계 최대 목조건물과 15m 대불상!",
+                        tip: "기둥 구멍 통과 도전",
+                        lat: 34.6890, lng: 135.8398,
+                        img: "https://placehold.co/800x500/3b82f6/ffffff?text=Todaiji+Temple&font=montserrat",
                         details: {
-                            hours: "츠텐카쿠 타워 10:00 - 20:00",
-                            price: "타워 입장료 800엔",
-                            address: "오사카시 나니와구 에비스히가시 1-18-6"
+                            hours: "07:30 - 17:30",
+                            price: "대불전 600엔",
+                            address: "나라시 조시초 406-1"
                         }
                     },
                     {
                         time: "19:30",
-                        title: "쿠시카츠 다루마",
+                        title: "족발의 카도야",
                         type: "food",
-                        tag: "저녁",
-                        desc: "오사카 명물 튀김 꼬치! '소스 두 번 찍기 금지' 룰 지키기~",
-                        tip: "맥주와 함께 🍺",
-                        lat: 34.6517, lng: 135.5065,
-                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Kushikatsu+Daruma&font=montserrat",
-                        details: {
-                            hours: "11:00 - 22:30",
-                            price: "1인당 2,000엔 내외",
-                            address: "신세카이 본점"
-                        }
+                        tag: "저녁/야식",
+                        desc: "뜯는 맛이 최고인 족발 조림! 맥주 무한 흡입 가능.",
+                        tip: "예약 추천",
+                        lat: 34.6670, lng: 135.5000,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Kadoya+Pork&font=montserrat",
+                        details: { hours: "17:00 - 23:00", price: "족발 세트 2,500엔", address: "난바" }
                     },
                     {
                         time: "21:00",
@@ -514,6 +510,17 @@
                             price: "라멘 800엔",
                             address: "도톤보리 본점"
                         }
+                    },
+                    {
+                        time: "23:30",
+                        title: "숙소 복귀",
+                        type: "hotel",
+                        tag: "휴식 😴",
+                        desc: "오늘 하루 고생했어! 푹 쉬고 내일 USJ를 위해 충전.",
+                        tip: "휴식 및 내일 준비",
+                        lat: 34.6635, lng: 135.5020,
+                        img: "https://placehold.co/800x500/f59e0b/ffffff?text=Return+to+Hotel&font=montserrat",
+                        details: { hours: "-", price: "-", address: "소테츠 프레사 인 오사카 난바" }
                     }
                 ]
             },
@@ -524,6 +531,17 @@
                 summary: "동심의 세계 USJ와 오사카 필수 먹방 코스!",
                 emoji: "🎢",
                 locations: [
+                    {
+                        time: "07:00",
+                        title: "숙소 출발",
+                        type: "hotel",
+                        tag: "USJ 오픈런!",
+                        desc: "유니버설 스튜디오 익스프레스 없이도 즐기기 위해 일찍 출발!",
+                        tip: "편한 신발 필수",
+                        lat: 34.6635, lng: 135.5020,
+                        img: "https://placehold.co/800x500/f59e0b/ffffff?text=Depart+from+Hotel&font=montserrat",
+                        details: { hours: "-", price: "-", address: "소테츠 프레사 인 오사카 난바" }
+                    },
                     {
                         time: "07:30",
                         title: "편의점 조식",
@@ -570,78 +588,126 @@
                     },
                     {
                         time: "21:30",
-                        title: "앗치치혼포 타코야키",
+                        title: "타코야키 & 마트 털기",
                         type: "food",
-                        tag: "야식",
-                        desc: "돈키호테 옆 빨간 문어! 포장해서 강변 벤치에서 맥주랑.",
-                        tip: "6개입 추천",
-                        lat: 34.6690, lng: 135.5033,
-                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Takoyaki&font=montserrat",
-                        details: { hours: "10:00 - 23:00", price: "6개 600엔", address: "도톤보리" }
+                        tag: "야식 🍣",
+                        desc: "앗치치혼포 타코야키와 근처 라이프 마켓에서 마트 초밥, 맥주 사오기!",
+                        tip: "숙소에서 편하게 야식 파티 🍻",
+                        lat: 34.6615, lng: 135.4950,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Takoyaki+and+Market&font=montserrat",
+                        details: { hours: "라이프 마켓 24:00까지", price: "예산 2,000엔 내외", address: "Life Namba (라이프 마켓 난바점)" }
+                    },
+                    {
+                        time: "23:00",
+                        title: "숙소 복귀",
+                        type: "hotel",
+                        tag: "휴식 😴",
+                        desc: "마트에서 사온 음식들과 함께 하루 마무리.",
+                        tip: "푹 자기",
+                        lat: 34.6635, lng: 135.5020,
+                        img: "https://placehold.co/800x500/f59e0b/ffffff?text=Return+to+Hotel&font=montserrat",
+                        details: { hours: "-", price: "-", address: "소테츠 프레사 인 오사카 난바" }
                     }
                 ]
             },
             // 3일차
             {
                 date: "2월 22일 (일)",
-                title: "나라 사슴 & 로컬 술집",
-                summary: "귀여운 사슴들과 힐링 후 찐 로컬 감성 술자리!",
-                emoji: "🦌",
+                title: "오사카 관광 & 로컬 술집",
+                summary: "니쿠스이로 든든하게 시작! 오사카성과 신세카이 정복!",
+                emoji: "🏯",
                 locations: [
                     {
-                        time: "09:00",
-                        title: "호시노 커피",
-                        type: "cafe",
-                        tag: "아침",
-                        desc: "클래식한 분위기의 모닝 세트 & 폭신한 수플레 팬케이크!",
-                        tip: "난바점 추천",
-                        lat: 34.6662, lng: 135.5005,
-                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Hoshino+Coffee&font=montserrat",
-                        details: { hours: "08:00 - 22:00", price: "모닝 세트 900엔", address: "난바 파크스점" }
+                        time: "08:00",
+                        title: "숙소 출발",
+                        type: "hotel",
+                        tag: "오사카 본격 투어",
+                        desc: "니쿠스이 먹으러 일찍 출발!",
+                        tip: "지하철 이용",
+                        lat: 34.6635, lng: 135.5020,
+                        img: "https://placehold.co/800x500/f59e0b/ffffff?text=Depart+from+Hotel&font=montserrat",
+                        details: { hours: "-", price: "-", address: "소테츠 프레사 인 오사카 난바" }
                     },
                     {
-                        time: "10:30",
-                        title: "나라 사슴공원",
+                        time: "08:30",
+                        title: "이치후지 식당",
+                        type: "food",
+                        tag: "아침 추천 ⭐",
+                        desc: "아침은 든든하게! 고깃국(니쿠스이)으로 해장.",
+                        tip: "현지인 맛집",
+                        lat: 34.6918, lng: 135.5172,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Ichifuji+Shokudo&font=montserrat",
+                        details: { hours: "07:00 - 14:00", price: "니쿠스이 900엔", address: "〒530-0043 Osaka, Kita Ward, Tenma, 2 Chome−13−16" }
+                    },
+                    {
+                        time: "10:00",
+                        title: "오사카 성",
                         type: "spot",
-                        tag: "힐링 🦌",
-                        desc: "사슴들에게 센베이를 주며 교감! 인사도 한답니다.",
-                        tip: "나라역에서 도보 15분",
-                        lat: 34.6850, lng: 135.8430,
-                        img: "https://placehold.co/800x500/3b82f6/ffffff?text=Nara+Deer+Park&font=montserrat",
-                        details: { hours: "24시간 개방", price: "무료 (센베이 200엔)", address: "나라시 조시초 469" }
+                        tag: "관광",
+                        desc: "오사카의 랜드마크! 천수각 배경으로 사진 필수.",
+                        tip: "입장료 600엔",
+                        lat: 34.6873, lng: 135.5262,
+                        img: "https://placehold.co/800x500/3b82f6/ffffff?text=Osaka+Castle&font=montserrat",
+                        details: { hours: "09:00 - 17:00", price: "천수각 입장료 600엔", address: "오사카시 주오구 오사카조 1-1" }
                     },
                     {
                         time: "13:00",
-                        title: "시즈카 공원점",
+                        title: "카레산도 우동",
                         type: "food",
                         tag: "점심 추천 ⭐",
-                        desc: "50년 전통 솥밥(카마메시)! 마지막 누룽지가 일품.",
-                        tip: "웨이팅 있을 수 있음",
-                        lat: 34.6860, lng: 135.8400,
-                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Kamameshi+Shizuka&font=montserrat",
-                        details: { hours: "11:00 - 20:00", price: "카마메시 1,800엔", address: "나라공원 인근" }
+                        desc: "오사카성 근처 인기 우동집! 줁깃한 면발과 진한 육수.",
+                        tip: "오사카조 공원 도보 5분",
+                        lat: 34.6870, lng: 135.5240,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Kare+Sandon+Udon&font=montserrat",
+                        details: { hours: "11:00 - 21:00", price: "우동 800엔", address: "오사카조 공원역 근처" }
                     },
                     {
                         time: "15:00",
-                        title: "토다이지 (대불전)",
+                        title: "츠텐카쿠 & 신세카이",
                         type: "spot",
                         tag: "관광",
-                        desc: "세계 최대 목조건물과 15m 대불상!",
-                        tip: "기둥 구멍 통과 도전",
-                        lat: 34.6890, lng: 135.8398,
-                        img: "https://placehold.co/800x500/3b82f6/ffffff?text=Todaiji+Temple&font=montserrat",
-                        details: { hours: "07:30 - 17:30", price: "대불전 600엔", address: "나라시 조시초 406-1" }
+                        desc: "레트로한 오사카 감성 거리. 화려한 간판들 구경!",
+                        tip: "야경이 예쁜 시간대",
+                        lat: 34.6525, lng: 135.5063,
+                        img: "https://placehold.co/800x500/3b82f6/ffffff?text=Tsutenkaku+Shinsekai&font=montserrat",
+                        details: { hours: "10:00 - 20:00", price: "타워 입장료 800엔", address: "오사카시 나니와구 에비스히가시" }
                     },
                     {
                         time: "19:00",
-                        title: "족발의 카도야",
+                        title: "쿠시카츠 다루마",
                         type: "food",
-                        tag: "저녁/야식",
-                        desc: "뜯는 맛이 최고인 족발 조림! 맥주 무한 흡입 가능.",
-                        tip: "예약 추천",
-                        lat: 34.6670, lng: 135.5000,
-                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Kadoya+Pork&font=montserrat",
-                        details: { hours: "17:00 - 23:00", price: "족발 세트 2,500엔", address: "난바" }
+                        tag: "저녁",
+                        desc: "오사카 명물 튀김 꼬치! '소스 두 번 찍기 금지' 룰 지키기~",
+                        tip: "맥주와 함께 🍺",
+                        lat: 34.6517, lng: 135.5065,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Kushikatsu+Daruma&font=montserrat",
+                        details: {
+                            hours: "11:00 - 22:30",
+                            price: "1인당 2,000엔 내외",
+                            address: "신세카이 본점"
+                        }
+                    },
+                    {
+                        time: "21:00",
+                        title: "돈키호테 쇼핑",
+                        type: "shop",
+                        tag: "쇼핑 🛍️",
+                        desc: "오사카 여행의 필수 코스! 가족, 친구 선물이랑 간식 털기.",
+                        tip: "5,000엔 이상 면세 혜택 챙기세요",
+                        lat: 34.6687, lng: 135.5031,
+                        img: "https://placehold.co/800x500/8b5cf6/ffffff?text=Don+Quijote&font=montserrat",
+                        details: { hours: "24시간 영업", price: "면세 가능", address: "돈키호테 도톤보리점" }
+                    },
+                    {
+                        time: "23:00",
+                        title: "숙소 복귀",
+                        type: "hotel",
+                        tag: "휴식 😴",
+                        desc: "쇼핑한 짐들 정리하고 꿀잠 자기.",
+                        tip: "마지막 밤 야식 금지(?)",
+                        lat: 34.6635, lng: 135.5020,
+                        img: "https://placehold.co/800x500/f59e0b/ffffff?text=Return+to+Hotel&font=montserrat",
+                        details: { hours: "-", price: "-", address: "소테츠 프레사 인 오사카 난바" }
                     }
                 ]
             },
@@ -653,15 +719,26 @@
                 emoji: "✈️",
                 locations: [
                     {
-                        time: "08:30",
-                        title: "이치후지 식당",
+                        time: "07:30",
+                        title: "숙소 출발",
+                        type: "hotel",
+                        tag: "마지막 날 시작",
+                        desc: "짐 다 챙겨서 로비에 맡기고 출발!",
+                        tip: "잊으신 물건 없나요?",
+                        lat: 34.6635, lng: 135.5020,
+                        img: "https://placehold.co/800x500/f59e0b/ffffff?text=Depart+from+Hotel&font=montserrat",
+                        details: { hours: "-", price: "-", address: "소테츠 프레사 인 오사카 난바" }
+                    },
+                    {
+                        time: "08:00",
+                        title: "月盗 (겟토)",
                         type: "food",
                         tag: "아침 추천 ⭐",
-                        desc: "마지막 날 아침은 든든하게! 고깃국(니쿠스이)으로 해장.",
-                        tip: "현지인 맛집",
-                        lat: 34.6650, lng: 135.5040,
-                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Ichifuji+Shokudo&font=montserrat",
-                        details: { hours: "07:00 - 14:00", price: "니쿠스이 900엔", address: "난바 인근" }
+                        desc: "폭신폭신 계란말이(다시마키 타마고)로 유명한 타니마치 맛집!",
+                        tip: "계란말이 정식 필수",
+                        lat: 34.6842, lng: 135.5147,
+                        img: "https://placehold.co/800x500/FF6B6B/ffffff?text=Getto+Tamagoyaki&font=montserrat",
+                        details: { hours: "08:00 - 15:00", price: "계란말이 정식 1,200엔", address: "〒540-0025 Osaka, Chuo Ward, Tokuicho, 1 Chome−4−10 イースタン船場ビル" }
                     },
                     {
                         time: "10:00",
@@ -686,7 +763,7 @@
                         details: { hours: "09:00 - 17:00", price: "1인 3,000-5,000엔", address: "오사카시 주오구 니폰바시 2-4-1" }
                     },
                     {
-                        time: "12:30",
+                        time: "11:30",
                         title: "난바역 → 간사이 공항",
                         type: "train",
                         tag: "이동",
